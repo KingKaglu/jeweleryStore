@@ -1,0 +1,19 @@
+import JewelryShop from "./Components/jewstore.jsx"
+import Header from "./Components/header.jsx"
+import About from './Components/About.jsx';
+import Contact from "./Components/Contact.jsx";
+import Footer from "./Components/Footer.jsx";
+function App() {
+
+  return (
+    <>
+    <Header></Header>
+  <JewelryShop></JewelryShop>
+  <About></About>
+  <Contact/>
+  <Footer/>
+    </>
+  )
+}
+
+export default App

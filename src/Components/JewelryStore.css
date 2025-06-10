@@ -1,0 +1,345 @@
+/* ===== Container Setup ===== */
+.jewelry-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  background-color: #fff;
+  font-family: 'Inter', sans-serif;
+  color: #222;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  outline-offset: 4px;
+}
+
+/* ===== Page Title ===== */
+.jewelry-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.8rem);
+  font-weight: 900;
+  text-align: center;
+  color: #4a3c31;
+  margin-bottom: 3.5rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 2px 4px rgba(180, 139, 108, 0.15);
+}
+
+/* ===== SortControl ===== */
+.sort-control {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.sort-control label {
+  font-weight: 600;
+  color: #5a503d;
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+  user-select: none;
+}
+
+.sort-control select {
+  padding: 0.75rem 1.4rem;
+  border: 2px solid #d3c2b5;
+  border-radius: 18px;
+  font-size: 1.1rem;
+  background-color: #fbf9f7;
+  color: #4a443a;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 4px 10px rgba(180, 139, 108, 0.12);
+}
+
+.sort-control select:focus,
+.sort-control select:hover {
+  border-color: #b48b6c;
+  box-shadow: 0 0 8px rgba(180, 139, 108, 0.6);
+  outline: none;
+}
+
+/* ===== Jewelry Grid ===== */
+.jewelry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 3rem;
+  padding-bottom: 2rem;
+  user-select: none;
+}
+
+/* ===== Jewelry Card ===== */
+.jewelry-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.06),
+    0 6px 6px rgba(180, 139, 108, 0.1);
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  will-change: transform;
+}
+
+.jewelry-card:hover,
+.jewelry-card:focus-within {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow:
+    0 20px 35px rgba(0, 0, 0, 0.12),
+    0 10px 15px rgba(180, 139, 108, 0.2);
+  outline: none;
+}
+
+/* Image styling */
+.jewelry-image {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-bottom: 2px solid #b48b6c;
+  transition: transform 0.3s ease;
+}
+
+.jewelry-card:hover .jewelry-image,
+.jewelry-card:focus-within .jewelry-image {
+  transform: scale(1.05);
+}
+
+/* Card Content */
+.jewelry-card-content {
+  padding: 1.8rem 1.8rem 2.2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Jewelry Name */
+.jewelry-name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #3c2e21;
+  margin: 0.8rem 0 0.6rem;
+  font-family: 'Playfair Display', serif;
+  text-align: center;
+  letter-spacing: 0.8px;
+}
+
+/* Jewelry Price */
+.jewelry-price {
+  font-size: 1.15rem;
+  color: #6f5d4e;
+  margin-bottom: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+/* Buy Button */
+.buy-button {
+  padding: 0.9rem 2.4rem;
+  background: linear-gradient(135deg, #c89f9c, #b48b6c);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  box-shadow: 0 6px 18px rgba(180, 139, 108, 0.4);
+  font-family: 'Inter', sans-serif;
+  user-select: none;
+}
+
+.buy-button:hover,
+.buy-button:focus-visible {
+  background: linear-gradient(135deg, #b48b6c, #a7775e);
+  transform: scale(1.1);
+  box-shadow: 0 10px 25px rgba(167, 119, 94, 0.5);
+  outline: none;
+}
+
+/* ===== Carousel Controls ===== */
+.carousel-controls {
+  position: relative;
+  margin-bottom: 1.5rem;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.arrow-btn {
+  position: relative;
+  background-color: #b48b6c;
+  border: none;
+  color: white;
+  font-size: 1.8rem;
+  padding: 0.6rem 1.3rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(180, 139, 108, 0.5);
+  user-select: none;
+  z-index: 10;
+}
+
+.arrow-btn:disabled {
+  background-color: #d1c4b8;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.arrow-btn:hover:not(:disabled),
+.arrow-btn:focus-visible:not(:disabled) {
+  background-color: #a7775e;
+  transform: scale(1.15);
+  outline: none;
+}
+
+.arrow-btn.left {
+  margin-right: auto;
+}
+
+.arrow-btn.right {
+  margin-left: auto;
+}
+
+/* ===== Jewelry Grid Carousel ===== */
+.jewelry-grid.carousel {
+  display: flex;
+  gap: 2.4rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: #b48b6c transparent;
+}
+
+/* Webkit scrollbar */
+.jewelry-grid.carousel::-webkit-scrollbar {
+  height: 8px;
+}
+
+.jewelry-grid.carousel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.jewelry-grid.carousel::-webkit-scrollbar-thumb {
+  background-color: #b48b6c;
+  border-radius: 20px;
+  border: 2px solid transparent;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .jewelry-title {
+    font-size: 2.8rem;
+  }
+  .sort-control {
+    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.8rem;
+  }
+
+  .sort-control label {
+    align-self: flex-start;
+  }
+
+  .sort-control select {
+    max-width: 280px;
+    width: 100%;
+  }
+
+  .carousel-controls {
+    gap: 1rem;
+  }
+
+  .arrow-btn {
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+  }
+  .arrow-btn.left {
+    margin-right: auto;
+  }
+  .arrow-btn.right {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .jewelry-title {
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .jewelry-card {
+    border-radius: 14px;
+  }
+
+  .jewelry-image {
+    height: 200px;
+  }
+
+  .jewelry-name {
+    font-size: 1.4rem;
+  }
+
+  .jewelry-price {
+    font-size: 1rem;
+  }
+
+  .buy-button {
+    padding: 0.7rem 1.8rem;
+    font-size: 0.95rem;
+    border-radius: 14px;
+  }
+
+  .arrow-btn {
+    font-size: 1.3rem;
+    padding: 0.4rem 0.8rem;
+  }
+  .arrow-btn.left {
+    margin-right: auto;
+  }
+  .arrow-btn.right {
+    margin-left: auto;
+  }
+}
+
+/* ===== Accessibility ===== */
+.jewelry-container:focus-within {
+  outline: 3px solid #b48b6c;
+  outline-offset: 8px;
+}
+
+/* Focus styles for keyboard navigation */
+.arrow-btn:focus-visible,
+.buy-button:focus-visible,
+.sort-control select:focus-visible {
+  outline: 3px solid #b48b6c;
+  outline-offset: 3px;
+}
+.jewelry-grid.carousel {
+  display: flex;
+  gap: 2.4rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: #b48b6c transparent;
+
+  /* Center the cards horizontally */
+  justify-content: center;
+
+  /* Vertically center cards if needed */
+  align-items: center;
+}
