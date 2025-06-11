@@ -10,18 +10,22 @@
 /* Main cart container */
 .cart-container {
   background-color: #fff;
-  padding: 2rem;
+  padding: 1.5rem;
   margin: 2rem auto 0;
-  max-width: 600px;
+  max-width: 90%; /* Allow container to shrink on smaller screens */
+  width: 100%;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
 }
 
 /* Cart title */
 .cart-container h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1.2rem;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
   text-align: center;
+  color: #333;
 }
 
 /* Empty cart message */
@@ -29,14 +33,15 @@
   text-align: center;
   color: #888;
   font-size: 1rem;
+  font-style: italic;
 }
 
 /* List of items in the cart */
 .cart-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
   display: block;
+  max-height: 400px;
+  overflow-y: auto; /* Allows scrolling */
+  margin-bottom: 1.5rem;
 }
 
 /* Single cart item */
@@ -54,8 +59,8 @@
 
 /* Product image in cart */
 .cart-image {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
   border-radius: 12px;
   flex-shrink: 0;
@@ -66,25 +71,59 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   max-width: 200px;
   flex: 1;
   min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Item name */
 .item-details h4 {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #333;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 200px;
 }
 
 /* Item price */
 .item-details p {
   margin: 0.2rem 0 0;
   color: #555;
+  font-size: 0.85rem;
+}
+
+/* Quantity controls for cart */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+}
+
+/* Quantity buttons */
+.quantity-btn {
+  padding: 0.5rem;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.quantity-btn:hover {
+  background-color: #e1e1e1;
+}
+
+/* Quantity display */
+.quantity-value {
+  font-weight: bold;
+  color: #333;
 }
 
 /* Buttons styling */
@@ -99,6 +138,7 @@
   font-weight: bold;
   transition: background-color 0.2s ease-in-out;
   user-select: none;
+  font-size: 0.85rem;
 }
 
 .remove-btn:hover,
@@ -109,6 +149,220 @@
 /* Cart total */
 .cart-total {
   margin-top: 1.5rem;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   text-align: right;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Remove All button at bottom */
+.remove-all-btn {
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.75rem 0;
+  background-color: #f2a500;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+.remove-all-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.remove-all-btn:hover {
+  background-color: #e38f00;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  /* Adjust cart container padding and width for smaller screens */
+  .cart-container {
+    background-color: #fff;
+    padding: 1.5rem;
+    margin: 2rem auto 0;
+    max-width: 90%; /* Allow container to shrink on smaller screens */
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;  /* Prevent overflow outside container */
+    display: flex;
+    flex-direction: column;
+    max-height: 500px; /* Added max-height for the cart container */
+  }
+
+  /* Decrease the size of the title */
+  .cart-container h2 {
+    font-size: 1.2rem;
+  }
+
+  /* Reduce item image size */
+  .cart-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  /* Make item name and price more compact */
+  .item-details h4 {
+    font-size: 0.9rem;
+    max-width: 150px;
+  }
+
+  /* Smaller font sizes for price and quantity controls */
+  .item-details p {
+    font-size: 0.8rem;
+  }
+
+  .quantity-btn {
+    padding: 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .quantity-value {
+    font-size: 0.9rem;
+  }
+
+  .quantity {
+    gap: 1rem;
+  }
+
+  /* Adjust remove and remove-all button padding */
+  .remove-btn,
+  .remove-all-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .cart-total {
+    font-size: 1rem;
+  }
+
+  /* Remove button and container width adjustments */
+  .cart-item {
+    justify-content: space-between; /* Keep items aligned */
+    gap: 0.5rem; /* Reduce gap between items */
+  }
+
+  .remove-btn {
+    padding: 0.4rem;
+    font-size: 0.75rem; /* Make the remove button smaller */
+    width: auto; /* Allow button to adjust width */
+    min-width: 0; /* Remove minimum width */
+    max-width: 100px; /* Set max width to avoid overflow */
+    flex-shrink: 0; /* Ensure it doesn't shrink too small */
+  }
+
+  .remove-all-btn {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+
+  .remove-all-btn {
+    width: 100%;
+    font-size: 1rem;
+  }
+}
+
+/* Mobile adjustments for 320px screens */
+@media (max-width: 320px) {
+  /* Make the cart container a little more compact */
+  .cart-container {
+    padding: 1rem;
+    margin: 1.5rem auto 0; /* Adjusted margin for smaller screens */
+    max-width: 90%; /* Allow the container to shrink */
+    width: 100%;
+    border-radius: 12px; /* Slightly reduce border-radius */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Reduced shadow for smaller screens */
+    position: relative;
+    overflow: hidden;
+    max-height: 400px; /* Reduce max-height */
+  }
+
+  .cart-container h2 {
+    font-size: 1.1rem; /* Slightly reduce the title size */
+  }
+
+  /* Decrease item image size */
+  .cart-image {
+    width: 40px; /* Reduce the image size */
+    height: 40px;
+  }
+
+  /* Make item name and price more compact */
+  .item-details h4 {
+    font-size: 0.85rem; /* Reduce font size */
+    max-width: 120px; /* Shorten the name width */
+  }
+
+  .item-details p {
+    font-size: 0.75rem; /* Make price smaller */
+  }
+
+  /* Adjust quantity controls */
+  .quantity-btn {
+    padding: 0.3rem; /* Make buttons smaller */
+    font-size: 0.7rem;
+  }
+
+  .quantity-value {
+    font-size: 0.8rem; /* Reduce font size for quantity */
+  }
+
+  /* Adjust remove and remove-all buttons */
+  .remove-btn,
+  .remove-all-btn {
+    padding: 0.3rem 0.6rem; /* Reduce padding for smaller buttons */
+    font-size: 0.75rem;
+  }
+
+  .cart-total {
+    font-size: 0.9rem; /* Make total font size smaller */
+  }
+
+  /* Make cart items more compact */
+  .cart-item {
+    gap: 0.4rem; /* Reduce gap between items */
+    padding: 0.8rem 0; /* Reduce padding between items */
+  }
+
+  .remove-btn {
+    padding: 0.3rem;
+    font-size: 0.65rem; /* Make the remove button smaller */
+    min-width: 0;
+    max-width: 80px; /* Reduce max-width */
+  }
+
+  /* Remove-all button adjustments */
+  .remove-all-btn {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+
+  .remove-all-btn {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+}
+
+/* Large screens (tablets and above) */
+@media (min-width: 1024px) {
+  .cart-container {
+    max-width: 800px;
+  }
+
+  .cart-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .item-details h4 {
+    font-size: 1.1rem;
+  }
+
+  .cart-total {
+    font-size: 1.2rem;
+  }
 }

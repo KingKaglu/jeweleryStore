@@ -2,11 +2,24 @@ import React from 'react';
 import './jewelryCart.css';
 
 const JewelryCart = ({ cartItems, onRemove, onRemoveAll }) => {
-  const totalCost = cartItems.reduce((sum, item) => sum + item.price, 0);
+  // Calculate total cost considering item quantities
+  const totalCost = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   const handleRemoveAllClick = () => {
     if (window.confirm('Are you sure you want to remove all items from the cart?')) {
       onRemoveAll();
+    }
+  };
+
+  const handleItemRemove = (index) => {
+    const item = cartItems[index];
+
+    // If quantity is greater than 1, just decrease quantity
+    if (item.quantity > 1) {
+      onRemove(index, 'decrease');
+    } else {
+      // If quantity is 1, remove the item entirely
+      onRemove(index, 'remove');
     }
   };
 
@@ -24,10 +37,17 @@ const JewelryCart = ({ cartItems, onRemove, onRemoveAll }) => {
                 <img src={item.image} alt={item.name} className="cart-image" />
                 <div className="item-details">
                   <h4>{item.name}</h4>
-                  <p>${item.price.toFixed(2)}</p>
-                  <button className="remove-btn" onClick={() => onRemove(index)} aria-label={`Remove ${item.name} from cart`}>
-                    Remove
-                  </button>
+                  <p>${(item.price * item.quantity).toFixed(2)}</p>
+                  <div className="quantity">
+                    <span>Quantity: {item.quantity} </span>
+                    <button
+                      className="remove-btn"
+                      onClick={() => handleItemRemove(index)}
+                      aria-label={`Remove one ${item.name} from cart`}
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
               </li>
             ))}

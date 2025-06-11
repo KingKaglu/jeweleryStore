@@ -1,11 +1,11 @@
-// src/components/JewelryShop.jsx
 import React, { useState, useEffect } from 'react';
 import JewelryCard from './JewelryCard.jsx';
 import SortControl from './SortControl.jsx';
 import JewelryCart from './JewelryCart.jsx';
-import './JewelryStore.css';
 import SearchableProductList from './SearchableProductList.jsx';
+import Contact from './Contact.jsx'; // ✅ Import the Contact component
 import jewelryData from '../data/jewelryData.js';
+import './JewelryStore.css';
 
 const JewelryShop = () => {
   const [sortOrder, setSortOrder] = useState('asc');
@@ -13,22 +13,42 @@ const JewelryShop = () => {
   const [itemsPerPage, setItemsPerPage] = useState(3);
   const [cartItems, setCartItems] = useState([]);
 
-  // Add an item to the cart
   const addToCart = (item) => {
-    setCartItems(prev => [...prev, item]);
+    setCartItems(prev => {
+      const itemExists = prev.some(cartItem => cartItem.id === item.id);
+      if (itemExists) {
+        // Update the quantity if the item already exists in the cart
+        return prev.map(cartItem =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+      }
+      return [...prev, { ...item, quantity: 1 }];
+    });
   };
 
-  // Remove an item from the cart by index
   const removeFromCart = (index) => {
-    setCartItems(prev => prev.filter((_, i) => i !== index));
+    setCartItems(prev => {
+      const updatedCartItems = [...prev];
+      const item = updatedCartItems[index];
+      
+      // If quantity is greater than 1, decrease the quantity
+      if (item.quantity > 1) {
+        updatedCartItems[index] = { ...item, quantity: item.quantity - 1 };
+      } else {
+        // Otherwise, remove the item completely
+        updatedCartItems.splice(index, 1);
+      }
+      
+      return updatedCartItems;
+    });
   };
-
-  // Remove all items from the cart
+  
   const removeAllFromCart = () => {
     setCartItems([]);
   };
 
-  // Responsive items per page based on window width
   useEffect(() => {
     const updateItemsPerPage = () => {
       if (window.innerWidth < 600) setItemsPerPage(1);
@@ -42,25 +62,20 @@ const JewelryShop = () => {
     return () => window.removeEventListener('resize', updateItemsPerPage);
   }, []);
 
-  // Reset pagination when sort order or items per page changes
   useEffect(() => {
     setCurrentIndex(0);
   }, [sortOrder, itemsPerPage]);
 
-  // Sort jewelry items based on price and selected order
   const sortedJewelry = [...jewelryData].sort((a, b) =>
     sortOrder === 'asc' ? a.price - b.price : b.price - a.price
   );
 
-  // Get visible items for current page
   const visibleItems = sortedJewelry.slice(currentIndex, currentIndex + itemsPerPage);
 
-  // Pagination controls
   const handlePrev = () => setCurrentIndex(prev => Math.max(prev - itemsPerPage, 0));
   const handleNext = () =>
     setCurrentIndex(prev => Math.min(prev + itemsPerPage, sortedJewelry.length - itemsPerPage));
 
-  // Keyboard navigation support for carousel
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowLeft') handlePrev();
@@ -77,7 +92,6 @@ const JewelryShop = () => {
 
       <SortControl sortOrder={sortOrder} onChange={setSortOrder} />
 
-      {/* ✅ Search bar with products */}
       <SearchableProductList onBuy={addToCart} />
 
       <div className="carousel-controls">
@@ -104,6 +118,9 @@ const JewelryShop = () => {
         onRemove={removeFromCart}
         onRemoveAll={removeAllFromCart}
       />
+
+      {/* ✅ Add the contact form and pass cartItems */}
+      <Contact cartItems={cartItems} />
     </div>
   );
 };
