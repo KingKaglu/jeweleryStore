@@ -1,6 +1,6 @@
 // src/Components/JewelryCard.jsx
 import React from 'react';
-import '../Components/jewelerycard.css';
+import './jewelerycard.css';
 
 const JewelryCard = ({ name, price, image, onBuy }) => {
   return (

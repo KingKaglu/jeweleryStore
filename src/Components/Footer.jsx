@@ -1,7 +1,7 @@
 // src/components/Footer.jsx
 import React from 'react';
 import './Footer.css';
-import { FaInstagram, FaFacebookF, FaEnvelope, FaPhoneAlt } from 'react-icons/fa';
+import { FaInstagram, FaFacebookF, FaEnvelope, FaPhoneAlt, FaLinkedin, FaGithub } from 'react-icons/fa';
 
 const Footer = () => {
   return (
@@ -24,8 +24,10 @@ const Footer = () => {
           </p>
         </div>
         <div className="footer-social">
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
+          <a href="https://www.instagram.com/giorgigzirshvili/" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+          <a href="https://www.facebook.com/giorgi.gzirishvili.168992/" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
+          <a href="https://linkedin.com/in/giorgigzirishvili" target="_blank" rel="noopener noreferrer"><FaLinkedin /></a>
+          <a href="https://github.com/kingkaglu" target="_blank" rel="noopener noreferrer"><FaGithub /></a>
         </div>
       </div>
     </footer>

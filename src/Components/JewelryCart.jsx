@@ -7,6 +7,7 @@ const JewelryCart = ({ cartItems, onRemove, onRemoveAll }) => {
   return (
     <div className="cart-container">
       <h2>Your Cart</h2>
+
       {cartItems.length === 0 ? (
         <p className="empty-cart">Your cart is empty.</p>
       ) : (
@@ -15,7 +16,7 @@ const JewelryCart = ({ cartItems, onRemove, onRemoveAll }) => {
             {cartItems.map((item, index) => (
               <li key={index} className="cart-item">
                 <img src={item.image} alt={item.name} className="cart-image" />
-                <div>
+                <div className="item-details">
                   <h4>{item.name}</h4>
                   <p>${item.price.toFixed(2)}</p>
                   <button className="remove-btn" onClick={() => onRemove(index)}>
