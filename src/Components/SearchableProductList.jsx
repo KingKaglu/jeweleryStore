@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// ✅ Correct
 import jewelryData from '../data/jewelryData.js';
 
 import "./SearchableProductList.css";
@@ -14,6 +13,13 @@ function SearchableProductList({ onBuy }) {
 
   const shouldShowResults = query.trim().length > 0;
 
+  // Handler to buy and clear search input
+  const handleBuyClick = (product) => {
+    console.log('Buy clicked for:', product.name);
+    onBuy(product);
+    setQuery("");  // ✅ Clear search input after buying
+  };
+
   return (
     <div className="product-search-container">
       <input
@@ -22,19 +28,26 @@ function SearchableProductList({ onBuy }) {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="search-bar"
+        aria-label="Search jewelry products"
       />
 
       {shouldShowResults && (
-        <div className="product-results">
+        <div className="product-results" role="list">
           {filteredProducts.length > 0 ? (
             <div className={`product-grid ${filteredProducts.length === 1 ? 'single-item' : ''}`}>
               {filteredProducts.map(product => (
-                <div key={product.id} className="product-card">
+                <div key={product.id} className="product-card" role="listitem">
                   <img src={product.image} alt={product.name} className="product-image" />
                   <h3>{product.name}</h3>
                   {product.description && <p>{product.description}</p>}
                   <span>${product.price.toFixed(2)}</span>
-                  <button className="buy-button" onClick={() => onBuy(product)}>Buy</button>
+                  <button
+                    type="button"
+                    className="buy-button"
+                    onClick={() => handleBuyClick(product)}
+                  >
+                    Buy
+                  </button>
                 </div>
               ))}
             </div>

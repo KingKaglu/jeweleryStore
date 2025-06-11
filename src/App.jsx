@@ -9,7 +9,7 @@ function App() {
   return (
     <>
     <Header></Header>
-    <SearchableProductList/>
+    
   <JewelryShop></JewelryShop>
   <About></About>
   <Contact/>
