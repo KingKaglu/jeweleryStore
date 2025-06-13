@@ -1,15 +1,42 @@
-// src/Components/JewelryCard.jsx
 import React from 'react';
-import './jewelerycard.css';
 
-const JewelryCard = ({ name, price, image, onBuy }) => {
+const JewelryCard = ({
+  id,
+  image,
+  name,
+  price,
+  description,
+  onBuy,
+  onReview,  // NEW prop
+  className,
+  imageClassName,
+  contentClassName,
+  nameClassName,
+  priceClassName,
+  buyButtonClassName,
+}) => {
   return (
-    <div className="jewelry-card">
-      <img src={image} alt={name} className="jewelry-image" />
-      <div className="jewelry-card-content">
-        <h2 className="jewelry-name">{name}</h2>
-        <p className="jewelry-price">${price.toFixed(2)}</p>
-        <button className="buy-button" onClick={onBuy}>Buy Now</button>
+    <div className={className}>
+      <img src={image} alt={name} className={imageClassName} />
+      <div className={contentClassName}>
+        <h2 className={nameClassName}>{name}</h2>
+        <p className={priceClassName}>${price.toFixed(2)}</p>
+        <button
+          onClick={onBuy}
+          className={buyButtonClassName}
+          aria-label={`Buy ${name}`}
+        >
+          Buy Now
+        </button>
+
+        {/* Review Button */}
+        <button
+          onClick={onReview}
+          className="ml-4 mt-4 inline-block bg-[#b48b6c] text-white font-semibold rounded-3xl py-2 px-6 hover:bg-[#a17552] transition-colors duration-300"
+          aria-label={`Review ${name}`}
+        >
+          Review
+        </button>
       </div>
     </div>
   );

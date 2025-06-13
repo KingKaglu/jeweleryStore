@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import JewelryCard from './JewelryCard.jsx';
 import SortControl from './SortControl.jsx';
 import JewelryCart from './JewelryCart.jsx';
-import SearchableProductList from './SearchableProductList.jsx';
-import Contact from './Contact.jsx'; // ✅ Import the Contact component
+import Contact from './Contact.jsx';
 import jewelryData from '../data/jewelryData.js';
-import './JewelryStore.css';
 
 const JewelryShop = () => {
   const [sortOrder, setSortOrder] = useState('asc');
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(3);
+  const [searchTerm, setSearchTerm] = useState('');
   const [cartItems, setCartItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); // <-- NEW
+  const itemsPerPage = 6; // <-- NEW
+  const navigate = useNavigate();
 
   const addToCart = (item) => {
     setCartItems(prev => {
       const itemExists = prev.some(cartItem => cartItem.id === item.id);
       if (itemExists) {
-        // Update the quantity if the item already exists in the cart
         return prev.map(cartItem =>
           cartItem.id === item.id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
@@ -30,98 +30,101 @@ const JewelryShop = () => {
 
   const removeFromCart = (index) => {
     setCartItems(prev => {
-      const updatedCartItems = [...prev];
-      const item = updatedCartItems[index];
-      
-      // If quantity is greater than 1, decrease the quantity
+      const updated = [...prev];
+      const item = updated[index];
       if (item.quantity > 1) {
-        updatedCartItems[index] = { ...item, quantity: item.quantity - 1 };
+        updated[index] = { ...item, quantity: item.quantity - 1 };
       } else {
-        // Otherwise, remove the item completely
-        updatedCartItems.splice(index, 1);
+        updated.splice(index, 1);
       }
-      
-      return updatedCartItems;
+      return updated;
     });
   };
-  
-  const removeAllFromCart = () => {
-    setCartItems([]);
-  };
 
-  useEffect(() => {
-    const updateItemsPerPage = () => {
-      if (window.innerWidth < 600) setItemsPerPage(1);
-      else if (window.innerWidth < 900) setItemsPerPage(2);
-      else setItemsPerPage(3);
-    };
+  const removeAllFromCart = () => setCartItems([]);
+  const handleReview = (id) => navigate(`/product/${id}`);
 
-    updateItemsPerPage();
-    window.addEventListener('resize', updateItemsPerPage);
+  // Filtered and Sorted
+  const filteredJewelry = jewelryData
+    .filter(item =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => sortOrder === 'asc' ? a.price - b.price : b.price - a.price);
 
-    return () => window.removeEventListener('resize', updateItemsPerPage);
-  }, []);
-
-  useEffect(() => {
-    setCurrentIndex(0);
-  }, [sortOrder, itemsPerPage]);
-
-  const sortedJewelry = [...jewelryData].sort((a, b) =>
-    sortOrder === 'asc' ? a.price - b.price : b.price - a.price
-  );
-
-  const visibleItems = sortedJewelry.slice(currentIndex, currentIndex + itemsPerPage);
-
-  const handlePrev = () => setCurrentIndex(prev => Math.max(prev - itemsPerPage, 0));
-  const handleNext = () =>
-    setCurrentIndex(prev => Math.min(prev + itemsPerPage, sortedJewelry.length - itemsPerPage));
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'ArrowLeft') handlePrev();
-      else if (e.key === 'ArrowRight') handleNext();
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex, itemsPerPage]);
+  // Pagination logic
+  const totalPages = Math.ceil(filteredJewelry.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentJewelry = filteredJewelry.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div id="shop" className="jewelry-container" tabIndex={0} aria-label="Jewelry shop carousel">
-      <h1 className="jewelry-title">Modern Jewelry Collection</h1>
+    <section
+      id="shop"
+      className="pt-24 min-h-screen bg-[#fdf9f8] dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-6 py-16"
+    >
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-extrabold mb-10 text-center font-playfair tracking-wide">
+          Jewelry Store
+        </h1>
 
-      <SortControl sortOrder={sortOrder} onChange={setSortOrder} />
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+          <SortControl sortOrder={sortOrder} onChange={setSortOrder} />
+          <input
+            type="text"
+            placeholder="Search jewelry..."
+            className="px-4 py-2 border rounded-lg w-full md:w-1/3 dark:bg-gray-800 dark:border-gray-600"
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1); // reset page on search
+            }}
+          />
+        </div>
 
-      <SearchableProductList onBuy={addToCart} />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
+          {currentJewelry.map(item => (
+            <JewelryCard
+              key={item.id}
+              {...item}
+              onBuy={() => addToCart(item)}
+              onReview={() => handleReview(item.id)}
+              className="bg-white dark:bg-[#2a2a2a] rounded-3xl shadow-lg hover:scale-105 transition-transform overflow-hidden"
+              imageClassName="w-full h-[260px] object-cover"
+              contentClassName="p-6 text-center"
+              nameClassName="font-playfair text-2xl font-bold mt-4 mb-3 text-[#3e342e] dark:text-[#f0e7dc]"
+              priceClassName="text-lg text-[#7c6c60] dark:text-[#d4c5b2] mb-6"
+              buyButtonClassName="bg-gradient-to-br from-[#d4a373] to-[#b5835a] text-white font-semibold py-3 px-10 rounded-3xl hover:scale-105 transition-transform"
+            />
+          ))}
+        </div>
 
-      <div className="carousel-controls">
-        <button onClick={handlePrev} disabled={currentIndex === 0} className="arrow-btn left">
-          &#8592;
-        </button>
-        <button
-          onClick={handleNext}
-          disabled={currentIndex >= sortedJewelry.length - itemsPerPage}
-          className="arrow-btn right"
-        >
-          &#8594;
-        </button>
+        {/* Pagination Buttons */}
+        <div className="flex justify-center mt-10 space-x-2">
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-4 py-2 rounded-full ${
+                currentPage === i + 1
+                  ? 'bg-[#b48b6c] text-white'
+                  : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100'
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+        </div>
+
+        <JewelryCart
+          cartItems={cartItems}
+          onRemove={removeFromCart}
+          onRemoveAll={removeAllFromCart}
+          className="mt-16"
+        />
+
+        <Contact cartItems={cartItems} />
       </div>
-
-      <div className="jewelry-grid carousel">
-        {visibleItems.map((item) => (
-          <JewelryCard key={item.id} {...item} onBuy={() => addToCart(item)} />
-        ))}
-      </div>
-
-      <JewelryCart
-        cartItems={cartItems}
-        onRemove={removeFromCart}
-        onRemoveAll={removeAllFromCart}
-      />
-
-      {/* ✅ Add the contact form and pass cartItems */}
-      <Contact cartItems={cartItems} />
-    </div>
+    </section>
   );
 };
 

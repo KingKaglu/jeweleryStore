@@ -1,30 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="transition-colors duration-500">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <title>Radiant Gems</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/jpg" href="/gem.jpg" />
 
-
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
 
-    <!-- Optional: SEO -->
-    <meta name="description" content="Discover elegant handcrafted jewelry at Radiant Gems. Shop our latest collection of rings, necklaces, and more." />
+    <!-- SEO -->
+    <meta
+      name="description"
+      content="Discover elegant handcrafted jewelry at Radiant Gems. Shop our latest collection of rings, necklaces, and more."
+    />
     <meta name="author" content="Radiant Gems" />
     <meta name="theme-color" content="#d4a373" />
 
-    <!-- Optional: Social Sharing -->
+    <!-- Social Sharing -->
     <meta property="og:title" content="Radiant Gems - Handcrafted Jewelry" />
-    <meta property="og:description" content="Explore our beautifully curated jewelry collection." />
+    <meta
+      property="og:description"
+      content="Explore our beautifully curated jewelry collection."
+    />
     <meta property="og:image" content="/public/gem.jpg" />
     <meta property="og:type" content="website" />
+
+    <!-- Set theme class from localStorage -->
+    <script>
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
   </head>
-  <body>
+  <body class="bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-500">
     <div id="root"></div>
 
     <!-- React Entry -->
