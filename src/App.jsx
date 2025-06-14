@@ -11,24 +11,35 @@ import './index.css';
 
 function App() {
   return (
-    
     <div className="min-h-screen flex flex-col bg-white text-black dark:bg-gray-900 dark:text-white">
       <Header />
-      
+
       <main className="flex-grow">
         <Routes>
           {/* Home route */}
           <Route path="/" element={<Home />} />
-     
-          {/* Other routes */}
+
+          {/* Product details */}
           <Route path="/product/:id" element={<ProductDetails />} />
+
+          {/* Shop, About, Contact */}
           <Route path="/shop" element={<JewelryShop />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<div className="p-4">404 Page Not Found</div>} />
+
+          {/* 404 fallback */}
+          <Route
+            path="*"
+            element={
+              <div className="p-8 text-center">
+                <h1 className="text-4xl font-bold mb-4">404</h1>
+                <p className="text-lg">The page you're looking for doesn't exist.</p>
+              </div>
+            }
+          />
         </Routes>
       </main>
-      
+
       <Footer />
     </div>
   );
