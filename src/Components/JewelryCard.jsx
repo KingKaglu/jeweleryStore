@@ -6,14 +6,15 @@ const JewelryCard = ({
   name,
   price,
   description,
-  onBuy,
-  onReview,  // NEW prop
-  className,
-  imageClassName,
-  contentClassName,
-  nameClassName,
-  priceClassName,
-  buyButtonClassName,
+  onBuy = () => {},
+  onReview = () => {},
+  className = '',
+  imageClassName = '',
+  contentClassName = '',
+  nameClassName = '',
+  priceClassName = '',
+  buyButtonClassName = '',
+  reviewButtonClassName = "ml-4 mt-4 inline-block bg-[#b48b6c] text-white font-semibold rounded-3xl py-2 px-6 hover:bg-[#a17552] transition-colors duration-300",
 }) => {
   return (
     <div className={className}>
@@ -21,6 +22,7 @@ const JewelryCard = ({
       <div className={contentClassName}>
         <h2 className={nameClassName}>{name}</h2>
         <p className={priceClassName}>${price.toFixed(2)}</p>
+
         <button
           onClick={onBuy}
           className={buyButtonClassName}
@@ -32,7 +34,7 @@ const JewelryCard = ({
         {/* Review Button */}
         <button
           onClick={onReview}
-          className="ml-4 mt-4 inline-block bg-[#b48b6c] text-white font-semibold rounded-3xl py-2 px-6 hover:bg-[#a17552] transition-colors duration-300"
+          className={reviewButtonClassName}
           aria-label={`Review ${name}`}
         >
           Review

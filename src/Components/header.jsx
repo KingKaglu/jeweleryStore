@@ -61,7 +61,7 @@ const Header = ({ cartItemCount = 0 }) => {
     <header
       className={`fixed top-0 w-full z-50 transition-transform duration-300 bg-white dark:bg-gray-900 shadow-md px-4 md:px-8 py-4 flex justify-between items-center ${visible ? 'translate-y-0' : '-translate-y-full'}`}
     >
-      <div className="text-2xl font-bold text-pink-600 dark:text-pink-400"><a href="/">✨ Radiant Gems</a></div>
+      <div className="text-2xl font-bold text-pink-600 dark:text-pink-400"><a href="/Home">✨ Radiant Gems</a></div>
 
       <nav className={`flex-col md:flex-row md:flex gap-6 md:gap-8 items-center absolute md:static top-full left-0 w-full md:w-auto bg-white dark:bg-gray-900 transition-all duration-300 ${menuOpen ? 'flex' : 'hidden md:flex'}`}>
         {navLinks.map(({ href, label }) => (

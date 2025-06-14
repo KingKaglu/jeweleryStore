@@ -18,11 +18,13 @@ export default function Home() {
         <p className="text-base sm:text-lg md:text-xl mb-6 max-w-2xl mx-auto animate-fadeUp delay-100">
           Timeless designs for every occasion. Elevate your style with our handcrafted pieces.
         </p>
-        <a href="/shop ">
+
+        {/* Updated to use React Router's Link instead of <a> */}
+        <Link to="/shop">
           <button className="bg-black text-white px-6 py-3 rounded-full text-lg hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 transition duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform">
             Shop Now
           </button>
-        </a>
+        </Link>
       </section>
 
       {/* Search with Product List */}
@@ -44,7 +46,7 @@ export default function Home() {
         </div>
 
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {[...jewelryData].slice(0, 3).map((item, i) => (
+          {[...jewelryData].slice(0, 3).map((item) => (
             <div
               key={item.id}
               className="shadow-lg dark:shadow-md dark:bg-gray-800 bg-white rounded-2xl overflow-hidden hover:shadow-2xl transform hover:scale-[1.02] transition duration-300 ease-in-out group"
@@ -87,7 +89,6 @@ export default function Home() {
           animation-delay: 0.1s;
         }
       `}</style>
-
     </main>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import JewelryCard from './JewelryCard.jsx';
 import SortControl from './SortControl.jsx';
@@ -10,8 +10,8 @@ const JewelryShop = () => {
   const [sortOrder, setSortOrder] = useState('asc');
   const [searchTerm, setSearchTerm] = useState('');
   const [cartItems, setCartItems] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // <-- NEW
-  const itemsPerPage = 6; // <-- NEW
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
   const navigate = useNavigate();
 
   const addToCart = (item) => {
@@ -28,13 +28,21 @@ const JewelryShop = () => {
     });
   };
 
-  const removeFromCart = (index) => {
+  const removeFromCart = (id, action = 'decrease') => {
     setCartItems(prev => {
+      const index = prev.findIndex(item => item.id === id);
+      if (index === -1) return prev;
+
       const updated = [...prev];
       const item = updated[index];
-      if (item.quantity > 1) {
-        updated[index] = { ...item, quantity: item.quantity - 1 };
-      } else {
+
+      if (action === 'decrease') {
+        if (item.quantity > 1) {
+          updated[index] = { ...item, quantity: item.quantity - 1 };
+        } else {
+          updated.splice(index, 1);
+        }
+      } else if (action === 'remove') {
         updated.splice(index, 1);
       }
       return updated;
@@ -44,18 +52,23 @@ const JewelryShop = () => {
   const removeAllFromCart = () => setCartItems([]);
   const handleReview = (id) => navigate(`/product/${id}`);
 
-  // Filtered and Sorted
-  const filteredJewelry = jewelryData
-    .filter(item =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .sort((a, b) => sortOrder === 'asc' ? a.price - b.price : b.price - a.price);
+  const filteredJewelry = useMemo(() => {
+    return jewelryData
+      .filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .sort((a, b) => (sortOrder === 'asc' ? a.price - b.price : b.price - a.price));
+  }, [searchTerm, sortOrder]);
 
-  // Pagination logic
   const totalPages = Math.ceil(filteredJewelry.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentJewelry = filteredJewelry.slice(startIndex, startIndex + itemsPerPage);
+
+  const handleSortChange = (order) => {
+    setSortOrder(order);
+    setCurrentPage(1);
+  };
 
   return (
     <section
@@ -68,7 +81,7 @@ const JewelryShop = () => {
         </h1>
 
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <SortControl sortOrder={sortOrder} onChange={setSortOrder} />
+          <SortControl sortOrder={sortOrder} onChange={handleSortChange} />
           <input
             type="text"
             placeholder="Search jewelry..."
@@ -76,7 +89,7 @@ const JewelryShop = () => {
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value);
-              setCurrentPage(1); // reset page on search
+              setCurrentPage(1);
             }}
           />
         </div>
@@ -98,12 +111,13 @@ const JewelryShop = () => {
           ))}
         </div>
 
-        {/* Pagination Buttons */}
         <div className="flex justify-center mt-10 space-x-2">
           {Array.from({ length: totalPages }, (_, i) => (
             <button
               key={i}
               onClick={() => setCurrentPage(i + 1)}
+              aria-current={currentPage === i + 1 ? 'page' : undefined}
+              aria-label={`Page ${i + 1}`}
               className={`px-4 py-2 rounded-full ${
                 currentPage === i + 1
                   ? 'bg-[#b48b6c] text-white'

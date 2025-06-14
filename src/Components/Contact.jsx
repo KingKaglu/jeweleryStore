@@ -1,9 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import emailjs from '@emailjs/browser';
 import { FaInstagram, FaFacebook, FaTwitter } from "react-icons/fa";
 
 const Contact = ({ cartItems }) => {
   const form = useRef();
+  const [statusMessage, setStatusMessage] = useState('');
+  const [statusType, setStatusType] = useState(''); // 'success' or 'error'
 
   const getCartDetails = () => {
     if (!cartItems || cartItems.length === 0) {
@@ -30,11 +32,13 @@ const Contact = ({ cartItems }) => {
       'OIPnX32W5GMaPK3ni'
     ).then(
       () => {
-        alert("Message sent successfully!");
+        setStatusType('success');
+        setStatusMessage('Message sent successfully!');
         form.current.reset();
       },
       (error) => {
-        alert("Something went wrong.");
+        setStatusType('error');
+        setStatusMessage('Something went wrong. Please try again later.');
         console.error('Email error:', error.text);
       }
     );
@@ -88,6 +92,13 @@ const Contact = ({ cartItems }) => {
             Send Message
           </button>
         </form>
+
+        {/* Status Message */}
+        {statusMessage && (
+          <p className={`mt-4 text-sm ${statusType === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+            {statusMessage}
+          </p>
+        )}
 
         {/* Social Media Icons */}
         <div className="flex justify-center items-center gap-5 mt-10">
