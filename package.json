@@ -1,5 +1,5 @@
 {
-  "homepage": "https://KingKaglu.github.io/jeweleryStore",
+  "homepage": "https://KingKaglu.github.io/fitforma",
   "name": "jewelery",
   "version": "1.0.0",
   "description": "React + Vite + TailwindCSS Jewelry Website",
@@ -20,7 +20,8 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-icons": "^5.5.0",
-    "react-router-dom": "^7.6.2"
+    "react-router-dom": "^7.6.2",
+    "react-toastify": "^11.0.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^3.0.0",

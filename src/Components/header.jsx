@@ -1,109 +1,218 @@
-import React, { useEffect, useState } from 'react';
-import { FaShoppingCart, FaMoon, FaSun } from 'react-icons/fa';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink, Link } from 'react-router-dom'; // Import Link for logo navigation
 
-const Header = ({ cartItemCount = 0 }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
-  const [visible, setVisible] = useState(true);
-  const location = useLocation();
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => setMenuOpen(prev => !prev);
-
-  const toggleDarkMode = () => {
-    const newMode = !isDarkMode;
-    setIsDarkMode(newMode);
-    localStorage.setItem('theme', newMode ? 'dark' : 'light');
-    if (newMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+  // Function to close the menu, useful after a link is clicked
+  const closeMenu = () => {
+    setIsMenuOpen(false);
   };
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      setIsDarkMode(true);
-      document.documentElement.classList.add('dark');
-    } else if (savedTheme === 'light') {
-      setIsDarkMode(false);
-      document.documentElement.classList.remove('dark');
-    } else {
-      // Optional: use system preference if no saved theme
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setIsDarkMode(prefersDark);
-      if (prefersDark) document.documentElement.classList.add('dark');
-      else document.documentElement.classList.remove('dark');
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollPos = window.scrollY;
-      setVisible(prevScrollPos > currentScrollPos || currentScrollPos < 10);
-      setPrevScrollPos(currentScrollPos);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [prevScrollPos]);
-
-  const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/shop', label: 'Shop' },
-    { href: '/about', label: 'About' },
-    { href: '/contact', label: 'Contact' },
-    
-  ];
-
   return (
-    <header
-      className={`fixed top-0 w-full z-50 transition-transform duration-300 bg-white dark:bg-gray-900 shadow-md px-4 md:px-8 py-4 flex justify-between items-center ${visible ? 'translate-y-0' : '-translate-y-full'}`}
-    >
-      <div className="text-2xl font-bold text-pink-600 dark:text-pink-400"><a href="/Home">✨ Radiant Gems</a></div>
-
-      <nav className={`flex-col md:flex-row md:flex gap-6 md:gap-8 items-center absolute md:static top-full left-0 w-full md:w-auto bg-white dark:bg-gray-900 transition-all duration-300 ${menuOpen ? 'flex' : 'hidden md:flex'}`}>
-        {navLinks.map(({ href, label }) => (
-          <Link
-            key={href}
-            to={href}
-            className={`text-gray-800 dark:text-gray-200 hover:text-pink-500 dark:hover:text-pink-400 transition-colors py-2 md:py-0 border-b md:border-0 border-gray-200 md:border-none ${location.pathname === href ? 'font-bold text-pink-600 dark:text-pink-400' : ''}`}
-            onClick={() => setMenuOpen(false)}
-          >
-            {label}
-          </Link>
-        ))}
-      </nav>
-
-      <div className="flex items-center gap-4">
-        <button
-          onClick={toggleDarkMode}
-          aria-label="Toggle dark mode"
-          className="text-xl text-gray-800 dark:text-gray-200 hover:text-pink-500 dark:hover:text-pink-400"
-        >
-          {isDarkMode ? <FaSun /> : <FaMoon />}
-        </button>
-
-        <Link to="/cart" className="relative" aria-label="View cart">
-          <FaShoppingCart className="text-xl text-gray-800 dark:text-gray-200 hover:text-pink-500 dark:hover:text-pink-400" />
-          {cartItemCount > 0 && (
-            <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full px-1.5">
-              {cartItemCount}
-            </span>
-          )}
+    <header className="bg-white shadow-md dark:bg-gray-900 sticky top-0 z-50 transition-all duration-300 border-b border-gray-100 dark:border-gray-800">
+      <nav className="flex justify-between items-center max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+        {/* Logo/Brand Name - Now clickable */}
+        <Link to="/" className="flex items-center" onClick={closeMenu}>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-800 dark:text-gray-100 tracking-wider select-none transform hover:scale-105 transition-transform duration-300">
+            FitForma
+          </h1>
         </Link>
 
-        <button
-          className="md:hidden flex flex-col justify-between w-6 h-4 focus:outline-none"
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
-        >
-          <span className={`h-0.5 bg-gray-800 dark:bg-gray-200 transition-transform ${menuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
-          <span className={`h-0.5 bg-gray-800 dark:bg-gray-200 ${menuOpen ? 'opacity-0' : ''}`}></span>
-          <span className={`h-0.5 bg-gray-800 dark:bg-gray-200 transition-transform ${menuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
-        </button>
-      </div>
+        {/* Desktop Navigation Links */}
+        <div className="hidden md:flex space-x-8 text-lg font-medium text-gray-600 dark:text-gray-400 items-center">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `relative px-1 py-2 group transition-all duration-300
+              ${isActive
+                ? "text-green-700 dark:text-green-300" // Active color
+                : "hover:text-green-600 dark:hover:text-green-400" // Hover color
+              }`
+            }
+          >
+            მთავარი {/* Home */}
+            <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-green-700 dark:bg-green-300 transition-all duration-300 group-hover:w-full"></span>
+          </NavLink>
+          <NavLink
+            to="/shop"
+            className={({ isActive }) =>
+              `relative px-1 py-2 group transition-all duration-300
+              ${isActive
+                ? "text-green-700 dark:text-green-300"
+                : "hover:text-green-600 dark:hover:text-green-400"
+              }`
+            }
+          >
+            მაღაზია {/* Shop */}
+            <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-green-700 dark:bg-green-300 transition-all duration-300 group-hover:w-full"></span>
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `relative px-1 py-2 group transition-all duration-300
+              ${isActive
+                ? "text-green-700 dark:text-green-300"
+                : "hover:text-green-600 dark:hover:text-green-400"
+              }`
+            }
+          >
+            ჩვენ შესახებ {/* About Us */}
+            <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-green-700 dark:bg-green-300 transition-all duration-300 group-hover:w-full"></span>
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              `relative px-1 py-2 group transition-all duration-300
+              ${isActive
+                ? "text-green-700 dark:text-green-300"
+                : "hover:text-green-600 dark:hover:text-green-400"
+              }`
+            }
+          >
+            კონტაქტი {/* Contact */}
+            <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-green-700 dark:bg-green-300 transition-all duration-300 group-hover:w-full"></span>
+          </NavLink>
+          <NavLink
+            to="/cart"
+            className={({ isActive }) =>
+              `relative px-1 py-2 group transition-all duration-300
+              ${isActive
+                ? "text-green-700 dark:text-green-300"
+                : "hover:text-green-600 dark:hover:text-green-400"
+              }`
+            }
+          >
+            კალათა {/* Cart */}
+            <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-green-700 dark:bg-green-300 transition-all duration-300 group-hover:w-full"></span>
+          </NavLink>
+        </div>
+
+        {/* Mobile Menu Button (Hamburger) */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 rounded-md p-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+            aria-label="მენიუს ღილაკი" // Menu button
+          >
+            {isMenuOpen ? (
+              // Close Icon (X)
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            ) : (
+              // Hamburger Icon
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+              </svg>
+            )}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay and Links */}
+      {isMenuOpen && (
+        <div className="md:hidden fixed inset-0 bg-black bg-opacity-70 z-40 animate-fade-in" onClick={closeMenu}>
+          <div
+            className="fixed top-0 right-0 w-64 h-full bg-white dark:bg-gray-800 shadow-xl transform translate-x-0 transition-transform duration-500 ease-out animate-slide-in-right"
+            // Prevent clicks inside the menu from closing it
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-end p-4">
+              <button
+                onClick={closeMenu}
+                className="text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 rounded-md p-2 transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                aria-label="მენიუს დახურვა" // Close menu
+              >
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+            <div className="flex flex-col p-4 space-y-4 text-xl font-medium">
+              <NavLink
+                to="/"
+                onClick={closeMenu}
+                className={({ isActive }) =>
+                  `block py-3 px-4 rounded-lg transition-colors duration-200
+                  ${isActive
+                    ? "bg-green-100 dark:bg-green-700 text-green-700 dark:text-green-300 font-bold shadow-sm"
+                    : "text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"}`
+                }
+              >
+                მთავარი {/* Home */}
+              </NavLink>
+              <NavLink
+                to="/shop"
+                onClick={closeMenu}
+                className={({ isActive }) =>
+                  `block py-3 px-4 rounded-lg transition-colors duration-200
+                  ${isActive
+                    ? "bg-green-100 dark:bg-green-700 text-green-700 dark:text-green-300 font-bold shadow-sm"
+                    : "text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"}`
+                }
+              >
+                მაღაზია {/* Shop */}
+              </NavLink>
+              <NavLink
+                to="/about"
+                onClick={closeMenu}
+                className={({ isActive }) =>
+                  `block py-3 px-4 rounded-lg transition-colors duration-200
+                  ${isActive
+                    ? "bg-green-100 dark:bg-green-700 text-green-700 dark:text-green-300 font-bold shadow-sm"
+                    : "text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"}`
+                }
+              >
+                ჩვენ შესახებ {/* About Us */}
+              </NavLink>
+              <NavLink
+                to="/contact"
+                onClick={closeMenu}
+                className={({ isActive }) =>
+                  `block py-3 px-4 rounded-lg transition-colors duration-200
+                  ${isActive
+                    ? "bg-green-100 dark:bg-green-700 text-green-700 dark:text-green-300 font-bold shadow-sm"
+                    : "text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"}`
+                }
+              >
+                კონტაქტი {/* Contact */}
+              </NavLink>
+              <NavLink
+                to="/cart"
+                onClick={closeMenu}
+                className={({ isActive }) =>
+                  `block py-3 px-4 rounded-lg transition-colors duration-200
+                  ${isActive
+                    ? "bg-green-100 dark:bg-green-700 text-green-700 dark:text-green-300 font-bold shadow-sm"
+                    : "text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"}`
+                }
+              >
+                კალათა {/* Cart */}
+              </NavLink>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Animation Styles */}
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-fade-in {
+          animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        @keyframes slideInRight {
+          from { transform: translateX(100%); }
+          to { transform: translateX(0); }
+        }
+        .animate-slide-in-right {
+          animation: slideInRight 0.3s ease-out forwards;
+        }
+      `}</style>
     </header>
   );
 };

@@ -1,94 +1,136 @@
-import React from "react";
-import SearchableProductList from "../components/SearchableProductList";
-import jewelryData from '../data/jewelryData.js';
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-export default function Home() {
-  return (
-    <main className="font-sans text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-900 transition-colors duration-300">
-      {/* Hero Section */}
-      <section className="pt-24 bg-gradient-to-r from-yellow-100 to-pink-100 dark:from-gray-800 dark:to-gray-700 py-20 px-6 text-center relative overflow-hidden">
-        <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold mb-4 animate-fadeUp tracking-tight">
-          <span className="relative z-10">
-            <span className="bg-gradient-to-r from-[#d1913c] to-[#ffd194] bg-clip-text text-transparent">
-              Discover Elegant Jewelry
-            </span>
-          </span>
-        </h1>
-        <p className="text-base sm:text-lg md:text-xl mb-6 max-w-2xl mx-auto animate-fadeUp delay-100">
-          Timeless designs for every occasion. Elevate your style with our handcrafted pieces.
-        </p>
+import retro1 from "../assets/retro/1.jpg";
+import retro2 from "../assets/retro/2.jpg";
+import retro3 from "../assets/retro/3.jpg";
 
-        {/* Updated to use React Router's Link instead of <a> */}
-        <Link to="/shop">
-          <button className="bg-black text-white px-6 py-3 rounded-full text-lg hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 transition duration-300 shadow-lg hover:shadow-xl hover:scale-105 transform">
-            Shop Now
-          </button>
-        </Link>
+import kids1 from "../assets/kidsRetro/1.jpg";
+import kids2 from "../assets/kidsRetro/2.jpg";
+
+import player1 from "../assets/2025-2026_season_player_version/1.jpg";
+import player2 from "../assets/2025-2026_season_player_version/2.jpg";
+
+import fan1 from "../assets/2025-2026_season_fan_version/1.jpg";
+import fan2 from "../assets/2025-2026_season_fan_version/2.jpg";
+
+export default function Home() {
+  const categories = [
+    {
+      id: "retro",
+      name: "რეტრო მაისურები",
+      description: "გაიხსენე ფეხბურთის ისტორია კლასიკური რეტრო მაისურებით.",
+      images: [retro1, retro2, retro3],
+    },
+    {
+      id: "kids-retro",
+      name: "საბავშვო რეტრო მაისურები",
+      description: "პატარა გულშემატკივრებისთვის, ლეგენდარული რეტრო დიზაინით.",
+      images: [kids1, kids2],
+    },
+    {
+      id: "player-2025-2026",
+      name: "2025-2026 წლის სეზონის მაისურები (მოთამაშის ვერსია)",
+      description: "ტექნოლოგიური და კომფორტული მაისურები, ზუსტად ისეთი, როგორსაც მოთამაშეები ატარებენ.",
+      images: [player1, player2],
+    },
+    {
+      id: "fan-2025-2026",
+      name: "2025-2026 წლის სეზონის მაისურები (ფან ვერსია)",
+      description: "აჩვენე შენი გულშემატკივრობა ოფიციალური ფან ვერსიის მაისურით.",
+      images: [fan1, fan2],
+    },
+  ];
+
+  const [imageIndexes, setImageIndexes] = useState([0, 0, 0, 0]);
+  const [fadeFlags, setFadeFlags] = useState([true, true, true, true]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFadeFlags([false, false, false, false]);
+
+      setTimeout(() => {
+        setImageIndexes((prev) =>
+          prev.map((index, i) => (index + 1) % categories[i].images.length)
+        );
+        setFadeFlags([true, true, true, true]);
+      }, 500);
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <main className="font-sans text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-900 transition-colors duration-300 min-h-screen">
+      {/* Hero Section - No Background */}
+      <section className="relative isolate min-h-[80vh] flex items-center justify-center text-gray-900 dark:text-gray-100 px-6 text-center">
+        <div className="max-w-4xl">
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight mb-6">
+            Gear Up with <span className="text-yellow-400">FitForma</span>
+          </h1>
+          <p className="text-lg md:text-2xl max-w-3xl mx-auto mb-10 leading-relaxed text-gray-700 dark:text-gray-300">
+            ხარისხიანი საფეხბურთო აღჭურვილობა და ტანსაცმელი ყველა მოთამაშისთვის.
+            ითამაშე ძლიერად, <span className="font-semibold">აღიჭურვე ჭკვიანურად</span>.
+          </p>
+          <Link to="/shop">
+            <button className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg text-lg md:text-xl font-semibold shadow-md hover:bg-yellow-300 transition duration-200">
+              კოლექციის დათვალიერება
+            </button>
+          </Link>
+        </div>
       </section>
 
-      {/* Search with Product List */}
-      <SearchableProductList products={jewelryData} />
-
-      {/* Divider */}
-      <hr className="border-t border-gray-300 dark:border-gray-700 my-16 mx-auto w-1/2" />
-
-      {/* Featured Products */}
-      <section className="py-24 px-6 bg-white dark:bg-gray-900 relative">
+      {/* Categories Section */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-100 dark:bg-gray-950">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white animate-fadeUp">
-            <span className="relative z-10">Featured Collections</span>
-            <span className="block w-24 h-1 bg-[#b48b6c] mx-auto mt-4 rounded animate-fadeUp delay-100"></span>
+          <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white">
+            პროდუქტის კატეგორიები
           </h2>
-          <p className="mt-4 text-gray-600 dark:text-gray-300 max-w-xl mx-auto text-lg">
-            Hand-picked favorites just for you — stylish, elegant, and one-of-a-kind pieces.
+          <p className="mt-6 text-lg text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
+            იპოვეთ თქვენთვის სასურველი მაისური ჩვენს ფართო კატეგორიებში.
           </p>
         </div>
 
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {[...jewelryData].slice(0, 3).map((item) => (
-            <div
-              key={item.id}
-              className="shadow-lg dark:shadow-md dark:bg-gray-800 bg-white rounded-2xl overflow-hidden hover:shadow-2xl transform hover:scale-[1.02] transition duration-300 ease-in-out group"
-            >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="p-6 text-left">
-                <h3 className="text-xl font-semibold mb-2 group-hover:text-[#b48b6c] transition">{item.name}</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4">${item.price.toFixed(2)}</p>
-                <Link to={`/product/${item.id}`}>
-                  <button className="px-5 py-2 bg-black text-white dark:bg-white dark:text-black rounded-full transition duration-300 hover:bg-gray-900 dark:hover:bg-gray-200 hover:scale-105 shadow-md hover:shadow-xl">
-                    View Details
-                  </button>
-                </Link>
-              </div>
-            </div>
-          ))}
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-7xl mx-auto">
+          {categories.map((category, i) => {
+            const currentImage = category.images[imageIndexes[i]];
+            const isVisible = fadeFlags[i];
+
+            return (
+              <Link
+                key={category.id}
+                to={`/shop?category=${category.id}`}
+                className="block"
+              >
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                  <div className="relative w-full h-64 overflow-hidden rounded-t-2xl">
+                    <img
+                      key={currentImage}
+                      src={currentImage}
+                      alt={category.name}
+                      style={{
+                        opacity: isVisible ? 1 : 0,
+                        transition: "opacity 0.5s ease-in-out",
+                      }}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-6">
+                      <h3 className="text-xl font-semibold text-white">
+                        {category.name}
+                      </h3>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-base text-gray-600 dark:text-gray-300">
+                      {category.description}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
-
-      {/* Animations */}
-      <style jsx>{`
-        @keyframes fadeUp {
-          0% {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeUp {
-          animation: fadeUp 1s ease-out forwards;
-        }
-        .delay-100 {
-          animation-delay: 0.1s;
-        }
-      `}</style>
     </main>
   );
 }

@@ -4,3 +4,21 @@ html {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@keyframes pingOnce {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.75;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-pingOnce {
+  animation: pingOnce 0.5s ease-in-out;
+}

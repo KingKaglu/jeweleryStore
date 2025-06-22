@@ -1,91 +1,44 @@
-import React from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import jewelryData from "../data/jewelryData";
-import { useCart } from "../Components/CartContext.jsx";
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-export default function ProductDetails() {
+const ProductDetails = ({ products, onAddToCart }) => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const product = jewelryData.find((item) => item.id.toString() === id);
-  const { addToCart } = useCart();
+  const product = products.find((item) => item.id.toString() === id);
 
-  if (!product) {
-    return (
-      <div className="text-center p-10 text-red-500 text-lg font-semibold">
-        Product not found.
-        <Link
-          to="/"
-          className="block mt-4 text-blue-600 dark:text-blue-400 hover:underline"
-        >
-          ← Back to Home
-        </Link>
-      </div>
-    );
-  }
+  if (!product) return <div className="p-6 text-red-500">პროდუქტი ვერ მოიძებნა</div>;
 
-  const handleBuy = () => {
-    addToCart(product);
-    alert(`${product.name} added to cart!`);
-    navigate("/");
+  const handleAdd = () => {
+    onAddToCart(product);
+    toast.success(`"${product.name}" დაემატა კალათაში 🛒`);
   };
 
   return (
-    <main
-      className="
-        min-h-[70vh]
-        max-w-6xl
-        mx-auto
-        pt-28
-        px-4 sm:px-6 lg:px-12
-        bg-white dark:bg-gray-900
-        text-gray-900 dark:text-gray-100
-        transition-colors duration-500
-        flex flex-col justify-center
-      "
-      style={{ paddingBottom: "2rem" }}
-    >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        {/* Product Image */}
-        <div className="overflow-hidden rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700">
-          <img
-            loading="lazy"
-            src={product.image}
-            alt={product.name}
-            className="w-full h-72 sm:h-96 object-cover object-center transition-transform duration-500 hover:scale-105"
-          />
-        </div>
-
-        {/* Product Details */}
-        <div className="space-y-6 sm:space-y-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight drop-shadow-sm">
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-full h-auto rounded-xl shadow"
+        />
+        <div>
+          <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
             {product.name}
           </h1>
-
-          <p className="text-2xl sm:text-3xl font-semibold text-[#b48b6c]">
-            ${product.price.toFixed(2)}
+          <p className="text-gray-600 dark:text-gray-300 mb-4">{product.description}</p>
+          <p className="text-2xl font-bold text-green-600 dark:text-green-400 mb-6">
+            ₾{product.price.toFixed(2)}
           </p>
-
-          <p className="text-base sm:text-lg leading-relaxed text-gray-700 dark:text-gray-300 max-w-prose">
-            {product.description ||
-              "This is a beautiful handcrafted piece perfect for every occasion."}
-          </p>
-
           <button
-            onClick={handleBuy}
-            className="inline-block bg-[#b48b6c] text-white font-semibold rounded-full px-8 sm:px-10 py-3 shadow-lg hover:bg-[#a17552] transition-colors duration-300 focus:outline-none focus:ring-4 focus:ring-[#b48b6c]/50"
-            aria-label={`Buy ${product.name}`}
+            onClick={handleAdd}
+            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-full font-semibold shadow-md transition"
           >
-            Buy Now
+            კალათაში დამატება
           </button>
-
-          <Link
-            to="/"
-            className="block mt-4 sm:mt-6 text-base sm:text-lg text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            ← Back to Home
-          </Link>
         </div>
       </div>
-    </main>
+    </div>
   );
-}
+};
+
+export default ProductDetails;

@@ -4,21 +4,20 @@ const About = () => {
   return (
     <section
       id="about"
-      className="pt-24 bg-[#fdf9f8] text-gray-800 dark:bg-gray-900 dark:text-gray-200 font-sans text-center animate-fadeIn py-20 px-8"
+      className="pt-24 bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 font-sans text-center animate-fadeIn py-24 px-6 sm:px-12 lg:px-24"
     >
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-4xl mb-6 text-[#b48b6c] font-serif uppercase tracking-wide">
-          About Us
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-5xl font-extrabold mb-8 text-green-700 dark:text-green-400 tracking-wide drop-shadow-md">
+          FirForma-ს შესახებ
         </h2>
-        <p className="text-lg leading-relaxed mb-6 text-gray-700 dark:text-gray-300">
-          Welcome to <strong>Radiant Gems</strong> – your destination for timeless elegance and handcrafted luxury. 
-          We curate a modern collection of fine jewelry made from the finest materials, designed to celebrate beauty, individuality, and sophistication.
+        <p className="text-xl sm:text-2xl leading-relaxed mb-8 text-gray-800 dark:text-gray-300 max-w-3xl mx-auto">
+          FirForma გთავაზობთ მაღალი ხარისხის საფეხბურთო აღჭურვილობას ყველა მოთამაშისთვის.
         </p>
-        <p className="text-lg leading-relaxed mb-6 text-gray-700 dark:text-gray-300">
-          Whether you're searching for a perfect gift or a statement piece for yourself, our collection offers a wide range of rings, necklaces, earrings, and bracelets to match every style and moment.
+        <p className="text-lg sm:text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-400 max-w-3xl mx-auto">
+          ჩვენი პროდუქტები მოიცავს ბურთებს, ფეხსაცმელს, მაისურებს და სხვა აუცილებელ ნივთებს თამაშისთვის.
         </p>
-        <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-          At Radiant Gems, we believe in quality, authenticity, and craftsmanship. Thank you for supporting our small business and choosing to sparkle with us.
+        <p className="text-lg sm:text-xl leading-relaxed text-gray-700 dark:text-gray-400 max-w-3xl mx-auto">
+          ჩვენი მიზანია დაგეხმაროთ თამაშში საუკეთესო შედეგის მიღებაში და გაგვაჩნია ინოვაციური დიზაინი და ხარისხი.
         </p>
       </div>
 
@@ -27,7 +26,7 @@ const About = () => {
         @keyframes fadeIn {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(25px);
           }
           to {
             opacity: 1;

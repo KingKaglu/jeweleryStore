@@ -1,47 +1,114 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Header from './Components/header.jsx';
-import JewelryShop from './Components/jewstore.jsx';
-import About from './Components/About.jsx';
-import Contact from './Components/Contact.jsx';
-import Footer from './Components/Footer.jsx';
-import Home from './Components/Home.jsx';
-import ProductDetails from './Components/ProductDetails.jsx';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import './index.css';
+import Header from './Components/Header';
+import Home from './Components/Home';
+import About from './Components/About';
+import Contact from './Components/Contact';
+import Footer from './Components/Footer';
+import Shop from './Components/Shop';
+import CategoryPage from './Components/CategoryPage';
+import Cart from './Components/Cart';
+import ProductDetails from './Components/ProductDetails';
+import Checkout from './Components/Checkout'; // ✅ დაამატე Checkout კომპონენტი
 
 function App() {
+  const [cartItems, setCartItems] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+
+  const onAddToCart = (product) => {
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find((item) => item.id === product.id);
+      if (existingItem) {
+        return prevItems.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        return [...prevItems, { ...product, quantity: 1 }];
+      }
+    });
+  };
+
+  const onRemoveItem = (id) => {
+    setCartItems((items) => items.filter((item) => item.id !== id));
+  };
+
+  const onUpdateQuantity = (id, quantity) => {
+    if (quantity < 1) return;
+    setCartItems((items) =>
+      items.map((item) =>
+        item.id === id ? { ...item, quantity } : item
+      )
+    );
+  };
+
+  const onClearCart = () => {
+    setCartItems([]);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-white text-black dark:bg-gray-900 dark:text-white">
-      <Header />
-
-      <main className="flex-grow">
+    <>
+      <Header cartItemCount={cartItems.length} />
+      <main className="min-h-[calc(100vh-120px)]">
         <Routes>
-          {/* Home route */}
           <Route path="/" element={<Home />} />
-
-          {/* Product details */}
-          <Route path="/product/:id" element={<ProductDetails />} />
-
-          {/* Shop, About, Contact */}
-          <Route path="/shop" element={<JewelryShop />} />
+          <Route
+            path="/shop"
+            element={<Shop onAddToCart={onAddToCart} setAllProducts={setAllProducts} />}
+          />
+          <Route path="/shop/:categoryId" element={<CategoryPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-
-          {/* 404 fallback */}
           <Route
-            path="*"
+            path="/cart"
             element={
-              <div className="p-8 text-center">
-                <h1 className="text-4xl font-bold mb-4">404</h1>
-                <p className="text-lg">The page you're looking for doesn't exist.</p>
-              </div>
+              <Cart
+                cartItems={cartItems}
+                onRemoveItem={onRemoveItem}
+                onUpdateQuantity={onUpdateQuantity}
+                onClearCart={onClearCart}
+              />
+            }
+          />
+          <Route
+            path="/product/:id"
+            element={
+              <ProductDetails
+                products={allProducts}
+                onAddToCart={onAddToCart}
+              />
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <Checkout
+                cartItems={cartItems}
+                total={cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)}
+              />
             }
           />
         </Routes>
       </main>
-
       <Footer />
-    </div>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
   );
 }
 
